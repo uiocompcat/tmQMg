@@ -1,6 +1,6 @@
 ![tmQM_Figure](https://user-images.githubusercontent.com/51946437/91875604-fabc5300-ec7b-11ea-9b0d-b6b308dc942b.png)
 
-This repository contains the quantum geometries and properties of the 62,011 transition metal complexes in the tmQM dataset.
+This repository contains the quantum geometries and properties of the 62,011 transition metal complexes in the tmQMg dataset.
 
 ## Data
 description of the data goes here
