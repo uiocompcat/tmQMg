@@ -2,7 +2,7 @@
 
 ## Data
 
-This repository contains the graph dataset tmQMg containing descriptive graph representations of 60,799 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide 3 different types of graphs baseline, u-NatQG and d-NatQG that are ready to use in deep graph learning methods. The code used to generate these representations can be found at `HyDGL <https://github.com/hkneiding/HyDGL>`_ A detailed discussion can be found in the corresponding `publication <https://chemrxiv.org/engage/chemrxiv/article-details/62b8daaf7da6ce76b221a831>`_
+This repository contains the graph dataset tmQMg containing descriptive graph representations of 60,799 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide 3 different types of graphs baseline, u-NatQG and d-NatQG that are ready to use in deep graph learning methods. The code used to generate these representations can be found at [HyDGL](https://github.com/hkneiding/HyDGL) A detailed discussion can be found in the corresponding [publication](https://chemrxiv.org/engage/chemrxiv/article-details/62b8daaf7da6ce76b221a831).
 
 ###### [data/tmQMg_properties_and_targets.csv](data/tmQMg_properties_and_targets.csv)
 - List of all 60,799 TMCs and their respective graph level features and quantum properties.
