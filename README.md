@@ -1,14 +1,21 @@
 ![tmQM_Figure](https://user-images.githubusercontent.com/51946437/91875604-fabc5300-ec7b-11ea-9b0d-b6b308dc942b.png)
 
-This repository contains the quantum geometries and properties of the 62,011 transition metal complexes in the tmQMg dataset.
-
 ## Data
-description of the data goes here
+
+This repository contains the graph dataset tmQMg containing descriptive graph representations of 60,799 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide 3 different types of graphs baseline, u-NatQG and d-NatQG that are ready to use in deep graph learning methods. The code used to generate these representations can be found at `HyDGL <https://github.com/hkneiding/HyDGL>`_ A detailed discussion can be found in the corresponding `publication <https://chemrxiv.org/engage/chemrxiv/article-details/62b8daaf7da6ce76b221a831>`_
+
+###### [data/tmQMg_properties_and_targets.csv](data/tmQMg_properties_and_targets.csv)
+- List of all 60,799 TMCs and their respective graph level features and quantum properties.
+- graph level features are: charge, molecular mass, number of atoms and number of electrons
+
+###### [data/outliers.txt](data/outliers.txt)
+- List of the IDs of about 2,5k of the TMCs that were deemed to be outliers based on their quantum properties.
+
+## Code
+
+Furthermore, we provide here the Python codes used to perform the various machine learning experiments. 
 
 ---
-license information goes here
-
-<!--
 
 [![CC BY NC 4.0][cc-by-nc-image]][cc-by-nc]
 
@@ -17,5 +24,3 @@ This work is licensed under a
 
 [cc-by-nc]: http://creativecommons.org/licenses/by-nc/4.0/
 [cc-by-nc-image]: https://i.creativecommons.org/l/by-nc/4.0/88x31.png
-
--->
