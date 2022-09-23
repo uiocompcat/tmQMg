@@ -133,3 +133,95 @@ def get_target_list_from_batch(batch: Batch, target_means=[0], target_stds=[1], 
     targets = (batch.y.numpy() * target_stds + target_means + offset).tolist()
 
     return targets
+
+class Tools:
+
+    @staticmethod
+    def get_one_hot_encoded_feature_dict(feature_dict: dict, class_feature_dict: dict) -> dict:
+
+        """Gets the one-hot encoding of a given feature list according to a given dict.
+
+        Returns:
+            dict: Dict of features.
+        """
+
+        one_hot_encoded_feature_dict = {}
+
+        for key in feature_dict.keys():
+
+            if key in class_feature_dict.keys():
+                one_hot_encoded_feature_dict[key] = (Tools.get_one_hot_encoding(len(class_feature_dict[key]), class_feature_dict[key].index(feature_dict[key])))
+            else:
+                one_hot_encoded_feature_dict[key] = (feature_dict[key])
+
+        return one_hot_encoded_feature_dict
+
+    @staticmethod
+    def get_one_hot_encoded_feature_list(feature_dict: dict, class_feature_dict: dict):
+
+        """Gets the one-hot encoding of a given feature list according to a given dict.
+
+        Returns:
+            list[float]: The one-hot encoded feature list.
+        """
+
+        one_hot_encoded_feature_dict = Tools.get_one_hot_encoded_feature_dict(feature_dict, class_feature_dict)
+
+        return Tools.flatten_list([one_hot_encoded_feature_dict[key] for key in one_hot_encoded_feature_dict.keys()])
+
+    @staticmethod
+    def get_one_hot_encoding(n_classes: int, class_number: int):
+
+        """Helper function that the one hot encoding for one specific element by specifying the number of classes and the class of the current element.
+
+        Raises:
+            ValueError: If a class number is requested that is higher than the maximum number of classes.
+
+        Returns:
+            list[int]: The one hot encoding of one element.
+        """
+
+        if class_number >= n_classes:
+            raise ValueError('Cannot get one hot encoding for a class number higher than the number of classes.')
+
+        # return empty list if there is only one type
+        if n_classes == 1:
+            return []
+
+        return [1 if x == class_number else 0 for x in list(range(n_classes))]
+
+    @staticmethod
+    def get_class_feature_keys(feature_dict):
+
+        """Takes a feature dict a determines at which keys non-numerical class features are used.
+
+        Returns:
+            list[str]: A list with keys which correspond to non-numerical class features.
+        """
+
+        class_feature_keys = []
+
+        # get indices of features that are not numeric and need to be one-hot encoded
+        for key in feature_dict.keys():
+            if not type(feature_dict[key]) == int and not type(feature_dict[key]) == float:
+                class_feature_keys.append(key)
+
+        return class_feature_keys
+
+    @staticmethod
+    def get_class_feature_indices(feature_list):
+
+        """Takes a feature list a determines at which positions non-numerical class features are used.
+
+        Returns:
+            list[int]: A list with indices denoting at which positions non-numerical class features are used.
+        """
+
+        class_feature_indices = []
+
+        # get indices of features that are not numeric and need to be one-hot encoded
+        for i in range(len(feature_list)):
+            if not type(feature_list[i]) == int and not type(feature_list[i]) == float:
+                class_feature_indices.append(i)
+
+        return class_feature_indices

@@ -7,9 +7,7 @@ import scipy as sp
 import pandas as pd
 
 from tmQMg import tmQMg
-from HyDGL.enums.qm_target import QmTarget
 from HyDGL.element_look_up_table import ElementLookUpTable
-from HyDGL.graph_generator_settings import GraphGeneratorSettings
 from nets import GilmerNetGraphLevelFeatures, GilmerNetGraphLevelFeaturesDropout, GilmerNetGraphLevelFeaturesEdgeDropout, GilmerNetGraphLevelFeaturesLayerNorm
 from trainer import Trainer
 import tools
@@ -28,7 +26,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = 'tmQMg-debug', wandb_ent
     tools.set_global_seed(hyper_param['seed'])
 
     # setup data set
-    dataset: tmQMg = hyper_param['data']['dataset'](root=hyper_param['data']['root_dir'], raw_dir=hyper_param['data']['raw_dir'], settings=hyper_param['data']['graph_representation'](targets=hyper_param['data']['targets']), exclude=hyper_param['data']['outliers'])
+    dataset: tmQMg = hyper_param['data']['dataset'](root=hyper_param['data']['root_dir'], graph_type=hyper_param['data']['graph_representation'], targets=hyper_param['data']['targets'], exclude=hyper_param['data']['outliers'])
     # obtain dictionary of meta data information
     meta_data_dict = dataset.get_meta_data_dict()
 
@@ -197,20 +195,19 @@ def run_ml(hyper_param: dict, wandb_project_name: str = 'tmQMg-debug', wandb_ent
     wandb.finish(exit_code=0)
 
 
-def run_baseline(target: QmTarget):
+def run_baseline(target: str):
 
-    with open('/home/hkneiding/Downloads/outliers_full.pickle', 'rb') as fh:
-        outliers = pickle.load(fh)
+    with open('./../data/outliers.txt', 'r') as fh:
+        outliers = fh.read().splitlines()
 
     hyper_param = {
-        'name': 'Baseline - ' + target._name_,
+        'name': 'Baseline - ' + target,
         'data': {
             'dataset': tmQMg,
-            'root_dir': '/home/hkneiding/Desktop/pyg-dataset-test-dir/run-baseline-' + target._name_,
-            'raw_dir': '/home/hkneiding/Documents/UiO/Data/tmQMg/extracted/',
+            'root_dir': '/home/hkneiding/Desktop/tmQMg-test',
             'val_set_size': 0.1,
             'test_set_size': 0.1,
-            'graph_representation': GraphGeneratorSettings.baseline,
+            'graph_representation': 'baseline',
             'targets': [target],
             'outliers': outliers
         },
@@ -257,149 +254,8 @@ def run_baseline(target: QmTarget):
     run_ml(hyper_param)
 
 
-def run_natq2(target: QmTarget):
-
-    with open('/home/hkneiding/Downloads/outliers_full.pickle', 'rb') as fh:
-        outliers = pickle.load(fh)
-
-    hyper_param = {
-        'name': 'NatQ2 - ' + target._name_,
-        'data': {
-            'dataset': tmQMg,
-            'root_dir': '/home/hkneiding/Desktop/pyg-dataset-test-dir/run-natq2-' + target._name_,
-            'raw_dir': '/home/hkneiding/Documents/UiO/Data/tmQMg/extracted/',
-            'val_set_size': 0.1,
-            'test_set_size': 0.1,
-            'graph_representation': GraphGeneratorSettings.natQ2extended,
-            'targets': [target],
-            'outliers': outliers
-        },
-        'model': {
-            'name': 'GilmerNet',
-            'method': GilmerNetGraphLevelFeatures,
-            'parameters': {
-                'n_node_features': 21,
-                'n_edge_features': 18,
-                'n_graph_features': 4,
-                'dim': 128,
-                'set2set_steps': 4,
-                'n_atom_jumps': 4
-            }
-        },
-        'optimizer': {
-            'name': 'Adam',
-            'method': torch.optim.Adam,
-            'parameters': {
-                'lr': 0.001
-            }
-        },
-        'scheduler': {
-            'name': 'ReduceLrOnPlateau',
-            'method': torch.optim.lr_scheduler.ReduceLROnPlateau,
-            'parameters': {
-                'mode': 'min',
-                'factor': 0.7,
-                'patience': 5,
-                'min_lr': 0.00001
-            }
-        },
-        'scaling': {
-            'type': 'standard',
-            'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
-        },
-        'atomic_contribution_linear_fit': False,
-        'batch_size': 32,
-        'gradient_accumulation_splits': 1,
-        'n_epochs': 300,
-        'seed': 2022
-    }
-
-    run_ml(hyper_param)
-
-
-def run_natq3(target: QmTarget):
-
-    with open('/home/hkneiding/Downloads/outliers_full.pickle', 'rb') as fh:
-        outliers = pickle.load(fh)
-
-    hyper_param = {
-        'name': 'NatQ3 - ' + target._name_,
-        'data': {
-            'dataset': tmQMg,
-            'root_dir': '/home/hkneiding/Desktop/pyg-dataset-test-dir/run-natq3-' + target._name_,
-            'raw_dir': '/home/hkneiding/Documents/UiO/Data/tmQMg/extracted/',
-            'val_set_size': 0.1,
-            'test_set_size': 0.1,
-            'graph_representation': GraphGeneratorSettings.natQ3,
-            'targets': [target],
-            'outliers': outliers
-        },
-        'model': {
-            'name': 'GilmerNet',
-            'method': GilmerNetGraphLevelFeatures,
-            'parameters': {
-                'n_node_features': 21,
-                'n_edge_features': 26,
-                'n_graph_features': 4,
-                'dim': 128,
-                'set2set_steps': 4,
-                'n_atom_jumps': 6
-            }
-        },
-        'optimizer': {
-            'name': 'Adam',
-            'method': torch.optim.Adam,
-            'parameters': {
-                'lr': 0.001
-            }
-        },
-        'scheduler': {
-            'name': 'ReduceLrOnPlateau',
-            'method': torch.optim.lr_scheduler.ReduceLROnPlateau,
-            'parameters': {
-                'mode': 'min',
-                'factor': 0.7,
-                'patience': 5,
-                'min_lr': 0.00001
-            }
-        },
-        'scaling': {
-            'type': 'standard',
-            'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
-        },
-        'atomic_contribution_linear_fit': False,
-        'batch_size': 32,
-        'gradient_accumulation_splits': 2,
-        'n_epochs': 150,
-        'seed': 2022
-    }
-
-    run_ml(hyper_param)
-
-
 # - - - entry point - - - #
 if __name__ == "__main__":
 
-    # api = wandb.Api()
-    # run = api.run("hkneiding/tmQMg-natQgraph2/17j02lpm")
-
-    targets = [
-        QmTarget.POLARISABILITY
-    ]
-
-    # targets = [
-    #     QmTarget.POLARISABILITY,
-    #     QmTarget.TZVP_DIPOLE_MOMENT,
-    #     QmTarget.TZVP_HOMO_ENERGY,
-    #     QmTarget.TZVP_LUMO_ENERGY,
-    #     QmTarget.TZVP_HOMO_LUMO_GAP,
-    #     QmTarget.LOWEST_VIBRATIONAL_FREQUENCY,
-    #     QmTarget.HIGHEST_VIBRATIONAL_FREQUENCY,
-    #     QmTarget.DIPOLE_MOMENT_DELTA,
-    #     QmTarget.HOMO_LUMO_GAP_DELTA,
-    #     QmTarget.DISPERSION_ENERGY_DELTA,
-    #     QmTarget.ELECTRONIC_ENERGY_DELTA
-    # ]
-
-    for target in targets:
-        run_natq2(target)
+    target = 'tzvp_dipole_moment'
+    run_baseline(target)
