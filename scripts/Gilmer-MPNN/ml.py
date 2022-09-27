@@ -197,7 +197,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = 'tmQMg-debug', wandb_ent
 
 def run_baseline(target: str):
 
-    with open('./../data/outliers.txt', 'r') as fh:
+    with open('./../../data/outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
 
     hyper_param = {
