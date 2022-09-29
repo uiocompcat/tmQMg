@@ -1,25 +1,34 @@
 import os
-import torch
+import pickle
 import pandas as pd
 import scipy
 import numpy as np
 from tqdm import tqdm
 import networkx as nx
-from torch_geometric.data import Dataset
+from torch_geometric.data import Dataset, download_url, extract_zip
 
 from tools import Tools
 from HyDGL import Graph
 
+
+RAW_URLS = [
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/baseline_graphs.zip',
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/uNatQ_graphs.zip',
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/dNatQ_graphs.zip'
+]
+
 class tmQMg(Dataset):
 
     def __init__(self, root: str, graph_type: str, targets: list[str], exclude: list[str] = []):
+
+        self.graph_type = graph_type
 
         # targets to consider
         self.targets = targets
 
         # directory to get raw data from
         self.root = root
-        self._raw_dir = root + '/' + graph_type +'/'
+        self._raw_dir = root + '/raw/'
 
         # if root path does not exist create folder
         if not os.path.isdir(root):
@@ -29,8 +38,14 @@ class tmQMg(Dataset):
         if not os.path.isdir(self._raw_dir):
             self.download()
 
-        #
-        self._file_paths = [self._raw_dir + '/' + file_name for file_name in os.listdir(self._raw_dir)] 
+        if graph_type == 'baseline':
+            self._raw_sub_dir = '/baseline_graphs/'
+        elif graph_type == 'uNatQ':
+            self._raw_sub_dir = '/uNatQ_graphs/'
+        elif graph_type == 'dNatQ':
+            self._raw_sub_dir = '/dNatQ_graphs/'
+        else:
+            raise ValueError('Graph type not recognised. Choose from "baseline", "uNatQ" and "dNatQ".')
 
         # list of files to exclude
         self._files_to_exclude = exclude
@@ -38,9 +53,8 @@ class tmQMg(Dataset):
         # start super class
         super().__init__(self.root)
 
-    @property
-    def file_paths(self):
-        return self._file_paths
+        with open(self.processed_dir + self.graph_type + '.pickle', 'rb') as fh:
+            self.graphs = pickle.load(fh)
 
     @property
     def raw_dir(self):
@@ -48,16 +62,21 @@ class tmQMg(Dataset):
 
     @property
     def raw_file_names(self):
-        return (pd.read_csv('../data/tmQMg_properties_and_targets.csv')['id'] + '.gml').tolist()
+        return (pd.read_csv('../../data/tmQMg_properties_and_targets.csv')['id'] + '.gml').tolist()
+
+    @property
+    def raw_paths(self):
+        return [os.path.join(self.raw_dir + self._raw_sub_dir, f) for f in self.raw_file_names]
 
     @property
     def processed_file_names(self):
-        return 'data'
+        return self.processed_dir + self.graph_type + '.pickle'
 
     def download(self):
         """Function to download raw data."""
-        print('Trying to download..')
-        raise NotImplementedError('Download function is not implemented.')
+        for raw_url in RAW_URLS:
+            file_path = download_url(raw_url, self.raw_dir)
+            extract_zip(file_path, self.raw_dir)
 
     def len(self):
         """Getter for the number of processed pytorch graphs."""
@@ -69,8 +88,6 @@ class tmQMg(Dataset):
 
     def process(self):
 
-        print('Start processing..')
-
         self.graphs = self.get_pytorch_graphs()
 
     def get_class_feature_dicts(self):
@@ -79,7 +96,7 @@ class tmQMg(Dataset):
 
         print('Getting class feature dicts..')
 
-        pivot_graph_object = Graph.from_networkx(nx.read_gml(self.file_paths[0]))
+        pivot_graph_object = Graph.from_networkx(nx.read_gml(self.raw_paths[0]))
 
         if len(pivot_graph_object.nodes) == 0:
             node_class_feature_keys = []
@@ -97,7 +114,7 @@ class tmQMg(Dataset):
         node_class_features = [[] for idx in node_class_feature_keys]
         edge_class_features = [[] for idx in edge_class_feature_keys]
 
-        for file_path in tqdm(self.file_paths):
+        for file_path in tqdm(self.raw_paths):
             # read graph object
             graph_object = Graph.from_networkx(nx.read_gml(file_path))
 
@@ -134,7 +151,7 @@ class tmQMg(Dataset):
         node_class_feature_dict, edge_class_feature_dict = self.get_class_feature_dicts()
 
         graphs = []
-        for file_path in tqdm(self.file_paths):
+        for file_path in tqdm(self.raw_paths):
 
             # skip if filename in exclude list
             if file_path.split('/')[-1].replace('.gml','') in self._files_to_exclude:
@@ -164,7 +181,8 @@ class tmQMg(Dataset):
 
             graphs.append(graph)
 
-        return graphs
+        with open(self.processed_dir + self.graph_type + '.pickle', 'wb') as fh:
+            pickle.dump(graphs, fh)
 
     def get_meta_data_dict(self):
 
@@ -178,7 +196,7 @@ class tmQMg(Dataset):
 
         meta_data_dict = {}
 
-        for file_path in tqdm(self.file_paths):
+        for file_path in tqdm(self.raw_paths):
 
             # read graph object
             meta_data_dict[file_path.split('/')[-1].replace('.gml', '')] = nx.read_gml(file_path).graph['meta_data']

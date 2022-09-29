@@ -14,7 +14,7 @@ import tools
 from plot import plot_correlation, plot_error_by_metal_center_group, plot_metal_center_group_histogram, plot_target_histogram, wandb_plot_error_by_metal_center_group
 
 
-def run_ml(hyper_param: dict, wandb_project_name: str = 'tmQMg-debug', wandb_entity: str = 'hkneiding'):
+def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', wandb_entity: str = '<wandb_entity>'):
 
     # wandb.config = hyper_param
     wandb.init(config=hyper_param, project=wandb_project_name, entity=wandb_entity)
@@ -204,7 +204,7 @@ def run_baseline(target: str):
         'name': 'Baseline - ' + target,
         'data': {
             'dataset': tmQMg,
-            'root_dir': '/home/hkneiding/Desktop/tmQMg-test',
+            'root_dir': '<root_dir>',
             'val_set_size': 0.1,
             'test_set_size': 0.1,
             'graph_representation': 'baseline',
