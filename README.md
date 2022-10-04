@@ -2,7 +2,7 @@
 
 ## Data
 
-This repository contains the graph dataset tmQMg containing descriptive graph representations of 60,799 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide 3 different types of graphs baseline, u-NatQG and d-NatQG that are ready to use in deep graph learning methods which can be found [here](https://archive.norstore.no/pages/public/datasetDetail.jsf?id=10.11582/2022.00042). The code used to generate these representations can be found at [HyDGL](https://github.com/hkneiding/HyDGL). A detailed discussion can be found in the corresponding [publication](https://chemrxiv.org/engage/chemrxiv/article-details/62b8daaf7da6ce76b221a831).
+This repository contains the graph dataset tmQMg containing descriptive graph representations of 60,799 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide three different types of graphs as GML formatted files: baseline, u-NatQG and d-NatQG. The graphs can be used in deep graph learning methods and can be downloaded from [here](https://archive.norstore.no/pages/public/datasetDetail.jsf?id=10.11582/2022.00042). The code used to generate these representations can be found at [HyDGL](https://github.com/hkneiding/HyDGL). A detailed discussion about the representations and machine learning methods can be found in the corresponding [publication](https://chemrxiv.org/engage/chemrxiv/article-details/62b8daaf7da6ce76b221a831).
 
 ###### [data/tmQMg_properties_and_targets.csv](data/tmQMg_properties_and_targets.csv)
 - List of all 60,799 TMCs and their respective graph level features and quantum properties.
@@ -13,8 +13,10 @@ This repository contains the graph dataset tmQMg containing descriptive graph re
 
 ## Code
 
-Furthermore, we provide here the Python codes used to perform the various machine learning experiments. 
-
+Furthermore, we provide here the Python codes used to perform the various machine learning experiments.  
+###### [scripts/Gilmer-MPNN/](scripts/Gilmer-MPNN/)
+- holds the code for the Gilmer net and comprehensive analysis of data
+- consult the provided README for more info
 ---
 
 [![CC BY NC 4.0][cc-by-nc-image]][cc-by-nc]
