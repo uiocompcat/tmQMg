@@ -6,20 +6,20 @@ This repository contains the graph dataset tmQMg containing descriptive graph re
 
 ###### [data/tmQMg_properties_and_targets.csv](data/tmQMg_properties_and_targets.csv)
 - List of all 60,799 TMCs and their respective graph level features and quantum properties.
-- graph level features are: charge, molecular mass, number of atoms and number of electrons
+- Graph level features are: charge, molecular mass, number of atoms and number of electrons
 
 ###### [data/tmQMg_xyz.zip ](data/tmQMg_xyz.zip)
 - Zip file of the xyz data of all compounds in the dataset.
 
 ###### [data/outliers.txt](data/outliers.txt)
-- List of the IDs of about 2,5k of the TMCs that were deemed to be outliers based on their quantum properties.
+- List of the IDs of about 2.5k of the TMCs that were deemed to be outliers based on their quantum properties.
 
 ## Code
 
 Furthermore, we provide here the Python codes used to perform the various machine learning experiments.  
 ###### [scripts/Gilmer-MPNN/](scripts/Gilmer-MPNN/)
-- holds the code for the Gilmer net and comprehensive analysis of data
-- consult the provided README for more info
+- Holds the code for the Gilmer net and comprehensive analysis of data.
+- Consult the provided README for more info.
 ---
 
 [![CC BY NC 4.0][cc-by-nc-image]][cc-by-nc]
