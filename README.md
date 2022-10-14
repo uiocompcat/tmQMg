@@ -8,7 +8,7 @@ This repository contains the graph dataset tmQMg containing descriptive graph re
 - List of all 60,799 TMCs and their respective graph level features and quantum properties.
 - graph level features are: charge, molecular mass, number of atoms and number of electrons
 
-###### [data/outliers.txt](data/tmQMg_xyz.txt)
+###### [data/tmQMg_xyz.zip ](data/tmQMg_xyz.zip)
 - Zip file of the xyz data of all compounds in the dataset.
 
 ###### [data/outliers.txt](data/outliers.txt)
