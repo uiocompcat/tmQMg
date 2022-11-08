@@ -12,9 +12,9 @@ from HyDGL import Graph
 
 
 RAW_URLS = [
-    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/baseline_graphs.zip',
-    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/uNatQ_graphs.zip',
-    'https://ns9999k.webs.sigma2.no/10.11582_2022.00042/nird/home/hanneskn/tmQMg/dNatQ_graphs.zip'
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00057/nird/home/hanneskn/tmQMg/baseline_graphs.zip',
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00057/nird/home/hanneskn/tmQMg/uNatQ_graphs.zip',
+    'https://ns9999k.webs.sigma2.no/10.11582_2022.00057/nird/home/hanneskn/tmQMg/dNatQ_graphs.zip'
 ]
 
 class tmQMg(Dataset):
