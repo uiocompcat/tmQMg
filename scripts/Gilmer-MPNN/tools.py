@@ -34,7 +34,10 @@ def get_feature_matrix_dict(dataset, feature_keys: list[str]):
             if feature_key not in feature_matrix_dict.keys():
                 feature_matrix_dict[feature_key] = []
 
-            feature_matrix_dict[feature_key].extend(data[feature_key].detach().numpy())
+            if type(data[feature_key].detach().numpy()[0]) == np.ndarray:
+                feature_matrix_dict[feature_key].extend(data[feature_key].detach().numpy())
+            else:
+                feature_matrix_dict[feature_key].append(data[feature_key].detach().numpy())
 
     for feature_key in feature_matrix_dict.keys():
         feature_matrix_dict[feature_key] = np.array(feature_matrix_dict[feature_key])
@@ -62,6 +65,9 @@ def standard_scale_dataset(dataset, feature_matrix_dict: dict):
         feature_means[feature_key] = np.mean(feature_matrix_dict[feature_key], axis=0)
         feature_stds[feature_key] = np.std(feature_matrix_dict[feature_key], axis=0)
 
+        # replace zero stds with ones
+        feature_stds[feature_key][feature_stds[feature_key] == 0] = 1
+
     for data in dataset:
         for feature_key in feature_matrix_dict.keys():
             data[feature_key] = (data[feature_key] - feature_means[feature_key]) / feature_stds[feature_key]
@@ -70,11 +76,11 @@ def standard_scale_dataset(dataset, feature_matrix_dict: dict):
 
 
 def get_feature_means_from_feature_matrix_dict(feature_matrix_dict: dict, feature_key: str):
-    return np.mean(feature_matrix_dict[feature_key], axis=0, keepdims=True)
+    return np.mean(feature_matrix_dict[feature_key], axis=0, keepdims=False)
 
 
 def get_feature_stds_from_feature_matrix_dict(feature_matrix_dict: dict, feature_key: str):
-    return np.std(feature_matrix_dict[feature_key], axis=0, keepdims=True)
+    return np.std(feature_matrix_dict[feature_key], axis=0, keepdims=False)
 
 
 def calculate_r_squared(predictions, targets):
