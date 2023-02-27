@@ -28,7 +28,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = 'test', wandb_entity: st
                                                     graph_type=hyper_param['data']['graph_representation'],
                                                     targets=hyper_param['data']['targets'],
                                                     exclude=hyper_param['data']['outliers'],
-                                                    developer_mode=False)
+                                                    developer_mode=True)
     # obtain dictionary of meta data information
     meta_data_dict = dataset.get_meta_data_dict()
 
@@ -197,7 +197,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = 'test', wandb_entity: st
     wandb.finish(exit_code=0)
 
 
-def run_baseline(target: str):
+def run_baseline(target: str, use_atomic_contribution_linear_fit: bool):
 
     with open('./../../data/outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
@@ -246,7 +246,7 @@ def run_baseline(target: str):
             'type': 'standard',
             'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
         },
-        'atomic_contribution_linear_fit': False,
+        'atomic_contribution_linear_fit': use_atomic_contribution_linear_fit,
         'batch_size': 32,
         'gradient_accumulation_splits': 1,
         'n_epochs': 300,
@@ -255,7 +255,7 @@ def run_baseline(target: str):
 
     run_ml(hyper_param)
 
-def run_uNatQ(target: str):
+def run_uNatQ(target: str, use_atomic_contribution_linear_fit: bool):
 
     with open('./../../data/outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
@@ -304,7 +304,7 @@ def run_uNatQ(target: str):
             'type': 'standard',
             'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
         },
-        'atomic_contribution_linear_fit': False,
+        'atomic_contribution_linear_fit': use_atomic_contribution_linear_fit,
         'batch_size': 32,
         'gradient_accumulation_splits': 1,
         'n_epochs': 300,
@@ -313,7 +313,7 @@ def run_uNatQ(target: str):
 
     run_ml(hyper_param)
 
-def run_dNatQ(target: str):
+def run_dNatQ(target: str, use_atomic_contribution_linear_fit: bool):
 
     with open('./../../data/outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
@@ -362,7 +362,7 @@ def run_dNatQ(target: str):
             'type': 'standard',
             'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
         },
-        'atomic_contribution_linear_fit': False,
+        'atomic_contribution_linear_fit': use_atomic_contribution_linear_fit,
         'batch_size': 32,
         'gradient_accumulation_splits': 1,
         'n_epochs': 300,
@@ -374,27 +374,36 @@ def run_dNatQ(target: str):
 # - - - entry point - - - #
 if __name__ == "__main__":
 
-    # targets used in the publication
+    # general targets
     targets = [
-        'target_tzvp_homo_lumo_gap',
-        'target_polarisability',
-        'target_tzvp_dipole_moment',
-        'target_tzvp_homo_energy',
-        'target_tzvp_lumo_energy',
-        'target_tzvp_electronic_energy',
-        'target_tzvp_dispersion_energy',
-        'target_zpe_correction',
-        'target_enthalpy_energy',
-        'target_heat_capacity',
-        'target_entropy',
-        'target_gibbs_energy',
-        'target_gibbs_energy_correction',
-        'target_highest_vibrational_frequency'
+        'tzvp_homo_lumo_gap',
+        'polarisability',
+        'tzvp_dipole_moment',
+        'tzvp_homo_energy',
+        'tzvp_lumo_energy',
+        'heat_capacity',
+        'entropy',
+        'gibbs_energy_correction',
+        'highest_vibrational_frequency'
+    ]
+
+    # targets for which to use atomic contribution linear fit
+    acf_targets = [
+        'tzvp_electronic_energy',
+        'tzvp_dispersion_energy',
+        'zpe_correction',
+        'enthalpy_energy',
+        'gibbs_energy'
     ]
 
     for target in targets:
 
-        run_baseline(target)
-        run_uNatQ(target)
-        run_dNatQ(target)
+        run_baseline(target, False)
+        run_uNatQ(target, False)
+        run_dNatQ(target, False)
 
+    for target in acf_targets:
+
+        run_baseline(target, True)
+        run_uNatQ(target, True)
+        run_dNatQ(target, True)
