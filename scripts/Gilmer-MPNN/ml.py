@@ -7,7 +7,7 @@ import pandas as pd
 
 from tmQMg import tmQMg
 from HyDGL.element_look_up_table import ElementLookUpTable
-from nets import GilmerNetGraphLevelFeatures
+from nets import GilmerNet, GilmerNetGraphLevelFeatures
 from trainer import Trainer
 import tools
 from plot import *
