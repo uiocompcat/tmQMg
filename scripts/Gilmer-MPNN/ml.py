@@ -1,4 +1,3 @@
-import pickle
 import torch
 from torch_geometric.loader import DataLoader
 import wandb
@@ -8,13 +7,12 @@ import pandas as pd
 
 from tmQMg import tmQMg
 from HyDGL.element_look_up_table import ElementLookUpTable
-from nets import GilmerNetGraphLevelFeatures, GilmerNetGraphLevelFeaturesDropout, GilmerNetGraphLevelFeaturesEdgeDropout, GilmerNetGraphLevelFeaturesLayerNorm
+from nets import GilmerNetGraphLevelFeatures
 from trainer import Trainer
 import tools
-from plot import plot_correlation, plot_error_by_metal_center_group, plot_metal_center_group_histogram, plot_target_histogram, wandb_plot_error_by_metal_center_group
+from plot import *
 
-
-def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', wandb_entity: str = '<wandb_entity>'):
+def run_ml(hyper_param: dict, wandb_project_name: str = 'test', wandb_entity: str = 'hkneiding'):
 
     # wandb.config = hyper_param
     wandb.init(config=hyper_param, project=wandb_project_name, entity=wandb_entity)
@@ -26,7 +24,11 @@ def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', 
     tools.set_global_seed(hyper_param['seed'])
 
     # setup data set
-    dataset: tmQMg = hyper_param['data']['dataset'](root=hyper_param['data']['root_dir'], graph_type=hyper_param['data']['graph_representation'], targets=hyper_param['data']['targets'], exclude=hyper_param['data']['outliers'])
+    dataset: tmQMg = hyper_param['data']['dataset'](root=hyper_param['data']['root_dir'], 
+                                                    graph_type=hyper_param['data']['graph_representation'],
+                                                    targets=hyper_param['data']['targets'],
+                                                    exclude=hyper_param['data']['outliers'],
+                                                    developer_mode=False)
     # obtain dictionary of meta data information
     meta_data_dict = dataset.get_meta_data_dict()
 
@@ -253,9 +255,146 @@ def run_baseline(target: str):
 
     run_ml(hyper_param)
 
+def run_uNatQ(target: str):
+
+    with open('./../../data/outliers.txt', 'r') as fh:
+        outliers = fh.read().splitlines()
+
+    hyper_param = {
+        'name': 'u-NatQ - ' + target,
+        'data': {
+            'dataset': tmQMg,
+            'root_dir': '<root_dir>',
+            'val_set_size': 0.1,
+            'test_set_size': 0.1,
+            'graph_representation': 'uNatQ',
+            'targets': [target],
+            'outliers': outliers
+        },
+        'model': {
+            'name': 'GilmerNet',
+            'method': GilmerNetGraphLevelFeatures,
+            'parameters': {
+                'n_node_features': 21,
+                'n_edge_features': 19,
+                'n_graph_features': 4,
+                'dim': 128,
+                'set2set_steps': 4,
+                'n_atom_jumps': 4
+            }
+        },
+        'optimizer': {
+            'name': 'Adam',
+            'method': torch.optim.Adam,
+            'parameters': {
+                'lr': 0.001
+            }
+        },
+        'scheduler': {
+            'name': 'ReduceLrOnPlateau',
+            'method': torch.optim.lr_scheduler.ReduceLROnPlateau,
+            'parameters': {
+                'mode': 'min',
+                'factor': 0.7,
+                'patience': 5,
+                'min_lr': 0.00001
+            }
+        },
+        'scaling': {
+            'type': 'standard',
+            'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
+        },
+        'atomic_contribution_linear_fit': False,
+        'batch_size': 32,
+        'gradient_accumulation_splits': 1,
+        'n_epochs': 300,
+        'seed': 2022
+    }
+
+    run_ml(hyper_param)
+
+def run_dNatQ(target: str):
+
+    with open('./../../data/outliers.txt', 'r') as fh:
+        outliers = fh.read().splitlines()
+
+    hyper_param = {
+        'name': 'd-NatQ - ' + target,
+        'data': {
+            'dataset': tmQMg,
+            'root_dir': '<root_dir>',
+            'val_set_size': 0.1,
+            'test_set_size': 0.1,
+            'graph_representation': 'dNatQ',
+            'targets': [target],
+            'outliers': outliers
+        },
+        'model': {
+            'name': 'GilmerNet',
+            'method': GilmerNetGraphLevelFeatures,
+            'parameters': {
+                'n_node_features': 21,
+                'n_edge_features': 26,
+                'n_graph_features': 4,
+                'dim': 128,
+                'set2set_steps': 4,
+                'n_atom_jumps': 6
+            }
+        },
+        'optimizer': {
+            'name': 'Adam',
+            'method': torch.optim.Adam,
+            'parameters': {
+                'lr': 0.001
+            }
+        },
+        'scheduler': {
+            'name': 'ReduceLrOnPlateau',
+            'method': torch.optim.lr_scheduler.ReduceLROnPlateau,
+            'parameters': {
+                'mode': 'min',
+                'factor': 0.7,
+                'patience': 5,
+                'min_lr': 0.00001
+            }
+        },
+        'scaling': {
+            'type': 'standard',
+            'features_to_scale': ['x', 'edge_attr', 'graph_attr', 'y']
+        },
+        'atomic_contribution_linear_fit': False,
+        'batch_size': 32,
+        'gradient_accumulation_splits': 1,
+        'n_epochs': 300,
+        'seed': 2022
+    }
+
+    run_ml(hyper_param)
 
 # - - - entry point - - - #
 if __name__ == "__main__":
 
-    target = 'tzvp_dipole_moment'
-    run_baseline(target)
+    # targets used in the publication
+    targets = [
+        'target_tzvp_homo_lumo_gap',
+        'target_polarisability',
+        'target_tzvp_dipole_moment',
+        'target_tzvp_homo_energy',
+        'target_tzvp_lumo_energy',
+        'target_tzvp_electronic_energy',
+        'target_tzvp_dispersion_energy',
+        'target_zpe_correction',
+        'target_enthalpy_energy',
+        'target_heat_capacity',
+        'target_entropy',
+        'target_gibbs_energy',
+        'target_gibbs_energy_correction',
+        'target_highest_vibrational_frequency'
+    ]
+
+    for target in targets:
+
+        run_baseline(target)
+        run_uNatQ(target)
+        run_dNatQ(target)
+
