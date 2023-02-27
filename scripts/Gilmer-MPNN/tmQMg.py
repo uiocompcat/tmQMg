@@ -21,6 +21,16 @@ class tmQMg(Dataset):
 
     def __init__(self, root: str, graph_type: str, targets: list[str], exclude: list[str] = [], developer_mode=False):
 
+        """Constructor for the tmQMg dataset class.
+
+        Arguments:
+            root (str): The directory path in which to store raw and processed data.
+            graph_type (str): The type of graph to use (baseline, uNatQ, dNatQ).
+            targets (list[str]): The targets to use.
+            exclude (list[str]): List of file names to be excluded.
+            developer_mode (bool): If set to True will only consider 1000 first data points.
+        """
+
         self.graph_type = graph_type
 
         # targets to consider
