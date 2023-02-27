@@ -12,7 +12,7 @@ from trainer import Trainer
 import tools
 from plot import *
 
-def run_ml(hyper_param: dict, wandb_project_name: str = 'test', wandb_entity: str = 'hkneiding'):
+def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', wandb_entity: str = '<wandb_entity>'):
 
     # wandb.config = hyper_param
     wandb.init(config=hyper_param, project=wandb_project_name, entity=wandb_entity)
