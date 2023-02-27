@@ -19,7 +19,7 @@ RAW_URLS = [
 
 class tmQMg(Dataset):
 
-    def __init__(self, root: str, graph_type: str, targets: list[str], exclude: list[str] = []):
+    def __init__(self, root: str, graph_type: str, targets: list[str], exclude: list[str] = [], developer_mode=False):
 
         self.graph_type = graph_type
 
@@ -29,6 +29,9 @@ class tmQMg(Dataset):
         # directory to get raw data from
         self.root = root
         self._raw_dir = root + '/raw/'
+
+        # if developer mode is set to True will only consider first 1000 examples
+        self.developer_mode = developer_mode
 
         # if root path does not exist create folder
         if not os.path.isdir(root):
@@ -66,6 +69,8 @@ class tmQMg(Dataset):
 
     @property
     def raw_paths(self):
+        if self.developer_mode:
+            return [os.path.join(self.raw_dir + self._raw_sub_dir, f) for f in self.raw_file_names][0:1000]
         return [os.path.join(self.raw_dir + self._raw_sub_dir, f) for f in self.raw_file_names]
 
     @property
