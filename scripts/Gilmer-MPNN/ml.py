@@ -28,7 +28,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', 
                                                     graph_type=hyper_param['data']['graph_representation'],
                                                     targets=hyper_param['data']['targets'],
                                                     exclude=hyper_param['data']['outliers'],
-                                                    developer_mode=True)
+                                                    developer_mode=False)
     # obtain dictionary of meta data information
     meta_data_dict = dataset.get_meta_data_dict()
 
