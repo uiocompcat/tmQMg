@@ -16,12 +16,13 @@ This repository contains the graph dataset tmQMg containing descriptive graph re
 ###### [data/tmQMg_xyz.zip ](data/tmQMg_xyz.zip)
 - Zip file of the xyz data of all compounds in the dataset.
 
-###### [data/outliers.txt](data/outliers.txt)
-- List of the IDs of about 2.5k of the TMCs that were deemed to be outliers based on their quantum properties.
-
 ## Code
 
-Furthermore, we provide here the Python codes used to perform the various machine learning experiments.  
+Furthermore, we provide here the Python codes used to perform the various machine learning experiments.
+
+###### [scripts/outliers.txt](scripts/outliers.txt)
+- List of the IDs of about 2.5k of the TMCs that were deemed to be outliers based on their quantum properties for the performed ML experiments.
+
 ###### [scripts/Gilmer-MPNN/](scripts/Gilmer-MPNN/)
 - Holds the code for the Gilmer net and comprehensive analysis of data.
 - Consult the provided README for more info.
