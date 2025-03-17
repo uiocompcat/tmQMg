@@ -14,6 +14,7 @@ This repository contains the graph dataset tmQMg containing descriptive graph re
 ###### [data/tmQMg_properties_and_targets.csv](data/tmQMg_properties_and_targets.csv)
 - List of all TMCs and their respective graph level features and quantum properties.
 - Graph level features are: charge, molecular mass, number of atoms and number of electrons
+- TMC SMILES computed using the [xyz2mol_tm tool](https://github.com/jensengroup/xyz2mol_tm) developed by the Jensen group. In particular, we made use of procedure based on extended Hückel data. Details can be found in the [associated publication](https://doi.org/10.26434/chemrxiv-2024-c660p).
 
 ###### [data/tmQMg_xyz.zip ](data/tmQMg_xyz.zip)
 - Zip file of the xyz data of all compounds in the dataset.
