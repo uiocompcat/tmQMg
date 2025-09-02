@@ -148,7 +148,7 @@ class tmQMg(Dataset):
         # build dicts that contain feature keys as keys and lists of possible class features as values
         node_class_feature_dict = {}
         for i, key in enumerate(node_class_feature_keys):
-            node_class_feature_dict[key] = edge_class_features[i]
+            node_class_feature_dict[key] = node_class_features[i]
 
         edge_class_feature_dict = {}
         for i, key in enumerate(edge_class_feature_keys):
