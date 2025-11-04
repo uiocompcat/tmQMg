@@ -1,8 +1,10 @@
+**Update November 2025**: 8 erroneous structures have been removed from the dataset.
+
 **Update 2024**: The tmQMg dataset has been extended by 13,756 transition metal complexes extracted from the Cambridge Structural Database.
 
 # tmQMg
 
-This repository contains the graph dataset tmQMg containing descriptive graph representations of 74,555 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide three different types of graphs as GML formatted files: baseline, u-NatQG and d-NatQG. The graphs can be used in deep graph learning methods and can be downloaded from [here](https://archive.sigma2.no/dataset/197648D5-FE7A-4DA0-ABED-F7ADC10B5C65). The code used to generate these representations can be found at [HyDGL](https://github.com/hkneiding/HyDGL). A detailed discussion about the representations and machine learning methods can be found in the corresponding [publication](https://doi.org/10.1039/D2DD00129B).
+This repository contains the graph dataset tmQMg containing descriptive graph representations of 74,547 transition metal complexes (TMCs), including all thirty elements from the 3d, 4d, and 5d series. These representations were derived from quantum chemistry simulation data and more preciseley Natural Bond Order (NBO) analysis. We provide three different types of graphs as GML formatted files: baseline, u-NatQG and d-NatQG. The graphs can be used in deep graph learning methods and can be downloaded from [here](https://data.archive.sigma2.no/dataset/tmqmg). The code used to generate these representations can be found at [HyDGL](https://github.com/hkneiding/HyDGL). A detailed discussion about the representations and machine learning methods can be found in the corresponding [publication](https://doi.org/10.1039/D2DD00129B).
 
 ![tmQMg_Figure](tmQMg.png)
 

@@ -267,7 +267,7 @@ def run_uNatQ(target: str, use_atomic_contribution_linear_fit: bool):
             'root_dir': '<root_dir>',
             'val_set_size': 0.1,
             'test_set_size': 0.1,
-            'graph_representation': 'uNatQ',
+            'graph_representation': 'u-NatQ',
             'targets': [target],
             'outliers': outliers
         },
@@ -325,7 +325,7 @@ def run_dNatQ(target: str, use_atomic_contribution_linear_fit: bool):
             'root_dir': '<root_dir>',
             'val_set_size': 0.1,
             'test_set_size': 0.1,
-            'graph_representation': 'dNatQ',
+            'graph_representation': 'd-NatQ',
             'targets': [target],
             'outliers': outliers
         },

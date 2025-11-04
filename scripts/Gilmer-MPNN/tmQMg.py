@@ -12,9 +12,9 @@ from HyDGL import Graph
 
 
 RAW_URLS = [
-    'https://data.archive.sigma2.no/dataset/97c4918a-8dee-447a-967a-d8445bc70c47/download/nird/home/hanneskn/tmQMg/baseline_graphs.zip',
-    'https://data.archive.sigma2.no/dataset/97c4918a-8dee-447a-967a-d8445bc70c47/download/nird/home/hanneskn/tmQMg/uNatQ_graphs.zip',
-    'https://data.archive.sigma2.no/dataset/97c4918a-8dee-447a-967a-d8445bc70c47/download/nird/home/hanneskn/tmQMg/dNatQ_graphs.zip'
+    'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/baseline_graphs.zip',
+    'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/u-NatQ_graphs.zip',
+    'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/u-NatQ_graphs.zip'
 ]
 
 class tmQMg(Dataset):
@@ -25,7 +25,7 @@ class tmQMg(Dataset):
 
         Arguments:
             root (str): The directory path in which to store raw and processed data.
-            graph_type (str): The type of graph to use (baseline, uNatQ, dNatQ).
+            graph_type (str): The type of graph to use (baseline, u-NatQ, d-NatQ).
             targets (list[str]): The targets to use.
             exclude (list[str]): List of file names to be excluded.
             developer_mode (bool): If set to True will only consider 1000 first data points.
@@ -53,12 +53,12 @@ class tmQMg(Dataset):
 
         if graph_type == 'baseline':
             self._raw_sub_dir = '/baseline_graphs/'
-        elif graph_type == 'uNatQ':
-            self._raw_sub_dir = '/uNatQ_graphs/'
-        elif graph_type == 'dNatQ':
-            self._raw_sub_dir = '/dNatQ_graphs/'
+        elif graph_type == 'u-NatQ':
+            self._raw_sub_dir = '/u-NatQ_graphs/'
+        elif graph_type == 'd-NatQ':
+            self._raw_sub_dir = '/d-NatQ_graphs/'
         else:
-            raise ValueError('Graph type not recognised. Choose from "baseline", "uNatQ" and "dNatQ".')
+            raise ValueError('Graph type not recognised. Choose from "baseline", "u-NatQ" and "d-NatQ".')
 
         # list of files to exclude
         self._files_to_exclude = exclude
