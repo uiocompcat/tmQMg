@@ -14,7 +14,7 @@ from HyDGL import Graph
 RAW_URLS = [
     'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/baseline_graphs.zip',
     'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/u-NatQ_graphs.zip',
-    'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/u-NatQ_graphs.zip'
+    'https://data.archive.sigma2.no/dataset/4f94f626-b18c-458c-946f-d7052bb05982/download/d-NatQ_graphs.zip'
 ]
 
 class tmQMg(Dataset):
