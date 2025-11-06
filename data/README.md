@@ -1,6 +1,6 @@
 ## tmQMg graph files
 
-The files of the actual graphs are stored on the NIRD data archive and can be found [here](https://data.archive.sigma2.no/dataset/tmqmg).
+The files of the actual graphs are stored on the NIRD data archive and can be found [here](https://archive.sigma2.no/dataset/tmqmg).
 
 In particular the three different types of graphs are:
 
