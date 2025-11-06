@@ -199,7 +199,7 @@ def run_ml(hyper_param: dict, wandb_project_name: str = '<wandb_project_name>', 
 
 def run_baseline(target: str, use_atomic_contribution_linear_fit: bool):
 
-    with open('./../../data/outliers.txt', 'r') as fh:
+    with open('./../outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
 
     hyper_param = {
@@ -257,7 +257,7 @@ def run_baseline(target: str, use_atomic_contribution_linear_fit: bool):
 
 def run_uNatQ(target: str, use_atomic_contribution_linear_fit: bool):
 
-    with open('./../../data/outliers.txt', 'r') as fh:
+    with open('./../outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
 
     hyper_param = {
@@ -315,7 +315,7 @@ def run_uNatQ(target: str, use_atomic_contribution_linear_fit: bool):
 
 def run_dNatQ(target: str, use_atomic_contribution_linear_fit: bool):
 
-    with open('./../../data/outliers.txt', 'r') as fh:
+    with open('./../outliers.txt', 'r') as fh:
         outliers = fh.read().splitlines()
 
     hyper_param = {
